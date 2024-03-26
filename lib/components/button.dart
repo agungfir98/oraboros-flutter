@@ -36,20 +36,22 @@ class _CustomButtonWidgetState extends State<CustomButtonWidget> {
       child: Center(
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 50),
-          margin: const EdgeInsets.only(left: 10, right: 10),
           padding: const EdgeInsets.only(top: 10, bottom: 10),
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.black, width: 1),
+            border: Border.all(
+              color: const Color.fromARGB(255, 29, 37, 48),
+              width: 1,
+            ),
             borderRadius: const BorderRadius.all(Radius.circular(10)),
             color: Colors.white,
             boxShadow: [
               _isTapped
                   ? const BoxShadow(
-                      color: Colors.black,
+                      color: Color.fromARGB(255, 29, 37, 48),
                       offset: Offset(0, 0),
                     )
                   : const BoxShadow(
-                      color: Colors.black,
+                      color: Color.fromARGB(255, 29, 37, 48),
                       offset: Offset(5, 5),
                     )
             ],

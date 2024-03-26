@@ -5,7 +5,7 @@ class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
 
   @override
-  _SplashPageState createState() => _SplashPageState();
+  State<SplashPage> createState() => _SplashPageState();
 }
 
 class _SplashPageState extends State<SplashPage> {
@@ -39,8 +39,8 @@ class _SplashPageState extends State<SplashPage> {
             children: [
               CircularProgressIndicator(),
               Text(
-                "ASUI",
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
+                "loading...",
+                style: TextStyle(fontSize: 24, fontFamily: "Lexend"),
               )
             ],
           ),

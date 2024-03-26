@@ -1,10 +1,10 @@
 name: oraboros
 description: "A new Flutter project."
-publish_to: 'none'
+publish_to: "none"
 version: 0.1.0
 
 environment:
-  sdk: '>=3.3.2 <4.0.0'
+  sdk: ">=3.3.2 <4.0.0"
 
 dependencies:
   flutter:
@@ -19,3 +19,14 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  fonts:
+    - family: Lexend
+      fonts:
+        - asset: assets/fonts/LexendMega-VariableFont_wght.ttf
+
+    - family: Abril
+      fonts:
+        - asset: assets/fonts/AbrilFatface-Regular.ttf
+  assets:
+    - assets/icons/google-icon.png

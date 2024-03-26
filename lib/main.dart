@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:oraboros/screens/auth.dart';
-import 'package:oraboros/screens/dashboard.dart';
-import 'package:oraboros/screens/splash_screen.dart';
+import 'package:oraboros/screens/auth.screen.dart';
+import 'package:oraboros/screens/dashboard.screen.dart';
+import 'package:oraboros/screens/splash.screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
@@ -32,7 +32,16 @@ class MyApp extends StatelessWidget {
       },
       title: 'Oraboros',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        textTheme: const TextTheme(
+          displayLarge: TextStyle(
+            color: Color.fromARGB(255, 29, 37, 48),
+            fontFamily: "Abril",
+          ),
+          bodyMedium: TextStyle(
+            color: Color.fromARGB(255, 29, 37, 48),
+            fontFamily: "Lexend",
+          ),
+        ),
         useMaterial3: true,
       ),
     );
