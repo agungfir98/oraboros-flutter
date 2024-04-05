@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:oraboros/DTO/budget.dto.dart';
 import 'package:oraboros/components/box_container.dart';
-import 'package:oraboros/components/button.dart';
 import 'package:oraboros/fetcher/budget.api.dart';
-import 'package:oraboros/main.dart';
 import 'package:oraboros/providers/profile.provider.dart';
 import 'package:provider/provider.dart';
 
@@ -47,14 +45,6 @@ class _MyHomePageState extends State<MyHomePage> {
               padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
               child: Column(
                 children: [
-                  CustomButtonWidget(
-                    child: const Text('logoout'),
-                    onTap: () {
-                      supabase.auth
-                          .signOut()
-                          .then((value) => print("logouttt"));
-                    },
-                  ),
                   BoxContainer(
                     child: Consumer<ProfileProvider>(
                       builder: (BuildContext context, value, Widget? child) {
@@ -75,12 +65,18 @@ class _MyHomePageState extends State<MyHomePage> {
                               ),
                             ),
                             const SizedBox(width: 10),
-                            Flexible(
+                            Expanded(
+                              flex: 2,
                               child: Text(
-                                "Halo, ${value.profile[ProfileProvider.display_name].toString().split(' ')[0]}",
+                                "Halo, ${value.profile[ProfileProvider.display_name].toString().split(" ")[0]}",
                                 overflow: TextOverflow.ellipsis,
                               ),
-                            )
+                            ),
+                            GestureDetector(
+                              child: const Icon(Icons.settings_outlined),
+                              onTap: () =>
+                                  Navigator.of(context).pushNamed('/settings'),
+                            ),
                           ],
                         );
                       },
