@@ -54,9 +54,20 @@
 			<array>
 				<!-- TODO Replace this value: -->
 				<!-- Copied from GoogleService-Info.plist key REVERSED_CLIENT_ID -->
-				<string>com.googleusercontent.apps.787307211182-q9stv8ul1ipvri97oeg4h0a2qpr1fql8</string>
+				<string>com.googleusercontent.apps.1068171244931-hl6dn8u763f4rp4skahk00kvvj6709ui</string>
 			</array>
 		</dict>
 	</array>
+	<key>CFBundleURLTypes</key>
+  <array>
+    <dict>
+      <key>CFBundleTypeRole</key>
+      <string>Editor</string>
+      <key>CFBundleURLSchemes</key>
+      <array>
+        <string>io.supabase.flutterquickstart</string>
+      </array>
+    </dict>
+  </array>
 </dict>
 </plist>

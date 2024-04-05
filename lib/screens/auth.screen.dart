@@ -15,11 +15,11 @@ class _AuthpageState extends State<Authpage> {
   Future<AuthResponse> _googleSignIn() async {
     // Web Client ID that you registered with Google Cloud.
     const webClientId =
-        '787307211182-57m8ff43mutj0ioap4uvns9uetk6b3ph.apps.googleusercontent.com';
+        '1068171244931-202u6mvikc2llvc25jm1pe7va5ko8p06.apps.googleusercontent.com';
 
     // iOS Client ID that you registered with Google Cloud.
     const iosClientId =
-        '787307211182-q9stv8ul1ipvri97oeg4h0a2qpr1fql8.apps.googleusercontent.com';
+        '1068171244931-hl6dn8u763f4rp4skahk00kvvj6709ui.apps.googleusercontent.com';
 
     // Google sign in on Android will work without providing the Android
     // Client ID registered on Google Cloud.
@@ -76,10 +76,7 @@ class _AuthpageState extends State<Authpage> {
               onTap: () {
                 _googleSignIn().then((value) => {
                       if (value.session != null)
-                        {
-                          Navigator.of(context)
-                              .pushReplacementNamed("/dashboard")
-                        }
+                        {Navigator.of(context).pushReplacementNamed("/")}
                     });
               },
               child: Center(
