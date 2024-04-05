@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:oraboros/providers/profile.provider.dart';
 import 'package:oraboros/screens/auth.screen.dart';
 import 'package:oraboros/screens/dashboard/dashboard.screen.dart';
+import 'package:oraboros/screens/settings.screen.dart';
 import 'package:oraboros/screens/splash.screen.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -35,7 +36,8 @@ class MyApp extends StatelessWidget {
       routes: {
         "/": (context) => const SplashPage(),
         "/dashboard": (context) => const MyHomePage(),
-        "/auth": (context) => const Authpage()
+        "/auth": (context) => const Authpage(),
+        "/settings": (context) => const SettingsScreen()
       },
       title: 'Oraboros',
       theme: ThemeData(
