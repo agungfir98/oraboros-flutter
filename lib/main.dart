@@ -41,6 +41,9 @@ class MyApp extends StatelessWidget {
       },
       title: 'Oraboros',
       theme: ThemeData(
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          selectedLabelStyle: TextStyle(color: Colors.red),
+        ),
         textTheme: const TextTheme(
           displayLarge: TextStyle(
             color: Color.fromARGB(255, 29, 37, 48),
