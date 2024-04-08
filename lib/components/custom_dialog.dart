@@ -23,88 +23,84 @@ class CustomDialogWidget extends StatelessWidget {
             BoxShadow(color: Color(0xff122334), offset: Offset(5, 5)),
           ],
         ),
-        child: Flexible(
-          flex: 1,
-          fit: FlexFit.tight,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: Theme.of(context).textTheme.headlineMedium,
-                ),
-                const SizedBox(height: 16),
-                content,
-                const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: Colors.red[400],
-                            border: Border.all(
-                              color: const Color(0xff122334),
-                              width: 1,
-                            ),
-                            boxShadow: const [
-                              BoxShadow(
-                                color: Color(0xff122334),
-                                offset: Offset(3, 5),
-                              ),
-                            ]),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 5, vertical: 8),
-                          child: Text(
-                            "cancel",
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodySmall
-                                ?.copyWith(color: Colors.white),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
+              const SizedBox(height: 20),
+              content,
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.red[300],
+                          border: Border.all(
+                            color: const Color(0xff122334),
+                            width: 1,
                           ),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Color(0xff122334),
+                              offset: Offset(3, 5),
+                            ),
+                          ]),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 5, vertical: 8),
+                        child: Text(
+                          "cancel",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall
+                              ?.copyWith(color: Colors.white),
                         ),
                       ),
                     ),
-                    const SizedBox(width: 20),
-                    GestureDetector(
-                      onTap: onOk,
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: Colors.blue[400],
-                            border: Border.all(
-                              color: const Color(0xff122334),
-                              width: 1,
-                            ),
-                            boxShadow: const [
-                              BoxShadow(
-                                color: Color(0xff122334),
-                                offset: Offset(3, 5),
-                              ),
-                            ]),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 5, vertical: 8),
-                          child: Text(
-                            'confirm',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodySmall
-                                ?.copyWith(color: Colors.white),
+                  ),
+                  const SizedBox(width: 20),
+                  GestureDetector(
+                    onTap: onOk,
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.blue[300],
+                          border: Border.all(
+                            color: const Color(0xff122334),
+                            width: 1,
                           ),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Color(0xff122334),
+                              offset: Offset(3, 5),
+                            ),
+                          ]),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 5, vertical: 8),
+                        child: Text(
+                          'confirm',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall
+                              ?.copyWith(color: Colors.white),
                         ),
                       ),
-                    )
-                  ],
-                )
-              ],
-            ),
+                    ),
+                  )
+                ],
+              )
+            ],
           ),
         ),
       ),
