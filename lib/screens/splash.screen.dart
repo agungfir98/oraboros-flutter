@@ -31,8 +31,6 @@ class _SplashPageState extends State<SplashPage> {
           await getProfileById(GetProfileByEmailDTO(id: session.user.id));
       ProfileDTO profileDTO = ProfileDTO.fromJson(profile);
 
-      print(profile);
-
       Provider.of<ProfileProvider>(context, listen: false).setProfile(
         ProfileDTO(
           display_name: profileDTO.display_name,
