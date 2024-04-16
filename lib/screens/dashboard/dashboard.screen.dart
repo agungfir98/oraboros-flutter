@@ -3,6 +3,8 @@ import 'package:oraboros/screens/dashboard/ui/budget_section.dart';
 import 'package:oraboros/screens/dashboard/ui/main_section.dart';
 import 'package:oraboros/screens/dashboard/ui/transaction_section.dart';
 
+import 'dashboardWidget/bottom_sheet_modal.dart';
+
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
 
@@ -44,7 +46,13 @@ class _MyHomePageState extends State<MyHomePage> {
         margin: const EdgeInsets.only(right: 10),
         child: FloatingActionButton(
           onPressed: () {
-            print("floating btn");
+            showModalBottomSheet(
+              isScrollControlled: true,
+              context: context,
+              builder: (BuildContext context) {
+                return const BottomSheetModal();
+              },
+            );
           },
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(100),
