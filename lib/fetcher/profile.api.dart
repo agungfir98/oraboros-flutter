@@ -2,7 +2,6 @@
 
 import 'package:oraboros/DTO/profile.dto.dart';
 import 'package:oraboros/main.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class Selector {
   late Map<String, bool?> _map;
@@ -39,7 +38,6 @@ class GetProfileByEmailDTO {
 
 Future<Map<String, dynamic>> getProfileById(
     GetProfileByEmailDTO getProfileDTO) async {
-  print("profile DTO ${getProfileDTO.id}");
   return await supabase
       .from("profiles")
       .select()
@@ -50,8 +48,6 @@ Future<Map<String, dynamic>> getProfileById(
       .single()
       .then(
     (value) {
-      print('VALUEEE');
-      print(value);
       return value;
     },
   );
