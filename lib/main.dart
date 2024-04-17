@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:oraboros/providers/profile.provider.dart';
 import 'package:oraboros/screens/auth.screen.dart';
 import 'package:oraboros/screens/dashboard/dashboard.screen.dart';
@@ -9,6 +10,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Intl.defaultLocale = "id_ID";
 
   await Supabase.initialize(
     url: 'https://xlalwccmjrbsezrtipxv.supabase.co',
