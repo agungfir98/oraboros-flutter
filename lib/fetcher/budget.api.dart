@@ -1,21 +1,14 @@
-import 'package:oraboros/DTO/budget.dto.dart';
 import 'package:oraboros/main.dart';
 
-class GetBudgetDTO {
-  final String userId;
+class BudgetService {
+  final String budgetTable = "budgets";
+  final String userIdKey = "user_id";
 
-  GetBudgetDTO({required this.userId});
-}
-
-Future<List<BudgetDTO>> getUserBudget(GetBudgetDTO budgetDTO) async {
-  List<Map<String, dynamic>> budgetList = await supabase
-      .from('budgets')
-      .select()
-      .eq(
-        'user_id',
-        budgetDTO.userId,
-      )
-      .then((value) => value);
-
-  return BudgetDTO.fromJsonList(budgetList);
+  Future<List<Map<String, dynamic>>> getUserBudget(String userId) {
+    return supabase
+        .from(budgetTable)
+        .select()
+        .eq(userIdKey, userId)
+        .then((value) => value);
+  }
 }
