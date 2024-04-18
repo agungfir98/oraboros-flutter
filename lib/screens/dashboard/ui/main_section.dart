@@ -14,7 +14,7 @@ class MainSection extends StatefulWidget {
 }
 
 class _MainSectionState extends State<MainSection> {
-  List<BudgetDTO> _budgetList = [];
+  List<Map<String, dynamic>> _budgetList = [];
 
   @override
   void initState() {
@@ -23,16 +23,15 @@ class _MainSectionState extends State<MainSection> {
   }
 
   fetchUserBudget() async {
-    List<BudgetDTO> budgetList = await getUserBudget(
-      GetBudgetDTO(
-        userId: context.read<ProfileProvider>().profile[ProfileProvider.id],
-      ),
-    );
-
-    if (mounted) {
+    String userId = context.read<ProfileProvider>().profile[ProfileProvider.id];
+    try {
+      List<Map<String, dynamic>> budgetList =
+          await BudgetService().getUserBudget(userId);
       setState(() {
         _budgetList = budgetList;
       });
+    } catch (e) {
+      print(e.toString());
     }
   }
 
@@ -114,14 +113,15 @@ class _MainSectionState extends State<MainSection> {
         ),
         SizedBox(
           height: 80,
-          child: ListView.builder(
+          child: ListView.separated(
             scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             itemCount: _budgetList.length,
             shrinkWrap: true,
             itemBuilder: (context, index) {
               return Container(
-                margin: const EdgeInsetsDirectional.symmetric(
-                    horizontal: 10, vertical: 10),
+                constraints: const BoxConstraints(maxWidth: 150),
+                margin: const EdgeInsetsDirectional.symmetric(vertical: 10),
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                 decoration: BoxDecoration(
@@ -142,16 +142,26 @@ class _MainSectionState extends State<MainSection> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "${_budgetList[index].name} ${_budgetList[index].icon}",
-                      style: Theme.of(context).textTheme.bodySmall,
+                      "${_budgetList[index][BudgetMapKey.name]} ${_budgetList[index][BudgetMapKey.icon]}",
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodySmall
+                          ?.copyWith(overflow: TextOverflow.ellipsis),
                     ),
                     Text(
-                        "Rp. ${NumberFormat('#,##,000', "id_ID").format(_budgetList[index].amount)}",
-                        style: Theme.of(context).textTheme.bodySmall),
+                        "Rp. ${NumberFormat.decimalPattern().format(_budgetList[index][BudgetMapKey.amount])}",
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall
+                            ?.copyWith(overflow: TextOverflow.ellipsis)),
                   ],
                 ),
               );
             },
+            separatorBuilder: (BuildContext context, int index) =>
+                const SizedBox(
+              width: 10,
+            ),
           ),
         ),
       ],
