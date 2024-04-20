@@ -6,16 +6,16 @@ import 'package:oraboros/main.dart';
 import 'package:oraboros/providers/profile.provider.dart';
 import 'package:provider/provider.dart';
 
-class BottomSheetModal extends StatefulWidget {
-  const BottomSheetModal({
+class NewTransactionSheet extends StatefulWidget {
+  const NewTransactionSheet({
     super.key,
   });
 
   @override
-  State<BottomSheetModal> createState() => _BottomSheetModalState();
+  State<NewTransactionSheet> createState() => _NewTransactionSheet();
 }
 
-class _BottomSheetModalState extends State<BottomSheetModal> {
+class _NewTransactionSheet extends State<NewTransactionSheet> {
   List<Map<String, TextEditingController>> _controller = [];
   List<FocusNode> _focusNameNode = [];
   List<FocusNode> _focusAmountNode = [];

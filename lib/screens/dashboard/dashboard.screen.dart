@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:oraboros/screens/dashboard/ui/budget_section.dart';
-import 'package:oraboros/screens/dashboard/ui/main_section.dart';
-import 'package:oraboros/screens/dashboard/ui/transaction_section.dart';
+import 'package:oraboros/screens/dashboard/screens/budget_section.dart';
+import 'package:oraboros/screens/dashboard/screens/main_section.dart';
+import 'package:oraboros/screens/dashboard/screens/transaction_section.dart';
+import 'package:oraboros/screens/dashboard/widgets/new_budget_sheet.dart';
+import 'package:oraboros/screens/dashboard/widgets/transaction_filter_sheet.dart';
 
-import 'dashboardWidget/bottom_sheet_modal.dart';
+import 'widgets/new_transaction_bottom_sheet.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -19,21 +21,27 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
   }
 
-  List<Map<String, dynamic>> sections = [
+  final List<Map<String, dynamic>> _sections = [
     {
+      "icon": const Icon(Icons.add),
       "navItem": const BottomNavigationBarItem(
           icon: Icon(Icons.home_outlined), label: "home"),
-      "widget": const MainSection()
+      "widget": const MainSection(),
+      "action": const NewTransactionSheet()
     },
     {
+      "icon": const Icon(Icons.attach_money),
       "navItem": const BottomNavigationBarItem(
           icon: Icon(Icons.attach_money_outlined), label: "budget"),
-      "widget": const BudgetSection()
+      "widget": const BudgetSection(),
+      "action": const NewBudgetSheet()
     },
     {
+      "icon": const Icon(Icons.filter_list),
       "navItem": const BottomNavigationBarItem(
           icon: Icon(Icons.swap_horiz_outlined), label: "transaction"),
-      "widget": const TransactionSection()
+      "widget": const TransactionSection(),
+      "action": const TransactionFilter()
     },
   ];
 
@@ -47,10 +55,10 @@ class _MyHomePageState extends State<MyHomePage> {
         child: FloatingActionButton(
           onPressed: () {
             showModalBottomSheet(
-              isScrollControlled: true,
+              isScrollControlled: currentSection == 0,
               context: context,
               builder: (BuildContext context) {
-                return const BottomSheetModal();
+                return _sections[currentSection]['action'];
               },
             );
           },
@@ -60,10 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           elevation: 0,
           backgroundColor: Colors.yellow[300],
-          child: const Icon(
-            Icons.add,
-            color: Color(0xff122334),
-          ),
+          child: _sections[currentSection]['icon'],
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
@@ -92,13 +97,13 @@ class _MyHomePageState extends State<MyHomePage> {
           selectedFontSize: 10,
           selectedLabelStyle:
               Theme.of(context).bottomNavigationBarTheme.selectedLabelStyle,
-          items: sections
-              .map<BottomNavigationBarItem>((e) => e['navItem'])
+          items: _sections
+              .map<BottomNavigationBarItem>((section) => section['navItem'])
               .toList(),
         ),
       ),
       body: SafeArea(
-        child: sections[currentSection]['widget'],
+        child: _sections[currentSection]['widget'],
       ),
     );
   }
