@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:oraboros/DTO/budget.dto.dart';
 import 'package:oraboros/components/box_container.dart';
-import 'package:oraboros/fetcher/budget.api.dart';
+import 'package:oraboros/services/budget.service.dart';
 import 'package:oraboros/providers/profile.provider.dart';
 import 'package:provider/provider.dart';
 

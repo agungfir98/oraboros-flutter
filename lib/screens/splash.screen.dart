@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:oraboros/DTO/profile.dto.dart';
-import 'package:oraboros/fetcher/profile.api.dart';
+import 'package:oraboros/services/profile.api.dart';
 import 'package:oraboros/main.dart';
 import 'package:oraboros/providers/profile.provider.dart';
 import 'package:provider/provider.dart';

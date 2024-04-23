@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:oraboros/components/button.dart';
-import 'package:oraboros/fetcher/transaction.api.dart';
+import 'package:oraboros/services/transaction.api.dart';
 import 'package:oraboros/main.dart';
 import 'package:oraboros/providers/profile.provider.dart';
 import 'package:provider/provider.dart';
@@ -454,7 +454,9 @@ class _NewTransactionSheet extends State<NewTransactionSheet> {
                   );
                   return;
                 }
-                newTransaction(userId, _orderList).then((value) {
+                TransactionService()
+                    .newTransaction(userId, _orderList)
+                    .then((value) {
                   Navigator.of(context).pop();
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(

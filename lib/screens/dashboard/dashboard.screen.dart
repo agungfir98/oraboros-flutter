@@ -55,7 +55,8 @@ class _MyHomePageState extends State<MyHomePage> {
         child: FloatingActionButton(
           onPressed: () {
             showModalBottomSheet(
-              isScrollControlled: currentSection == 0,
+              isScrollControlled: true,
+              isDismissible: currentSection != 1,
               context: context,
               builder: (BuildContext context) {
                 return _sections[currentSection]['action'];
