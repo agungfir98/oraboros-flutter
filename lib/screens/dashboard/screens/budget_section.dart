@@ -47,15 +47,15 @@ class _BudgetSectionState extends State<BudgetSection> {
           style: Theme.of(context).textTheme.bodyMedium,
         ),
       ),
-      body: RefreshIndicator(
-        color: const Color(0xff122334),
-        onRefresh: fetchData,
-        child: SafeArea(
+      body: SafeArea(
+        child: RefreshIndicator(
+          color: const Color(0xff122334),
+          onRefresh: fetchData,
           child: Container(
             margin: const EdgeInsets.only(bottom: 40),
             child: ListView.separated(
               padding: const EdgeInsets.symmetric(vertical: 10),
-              shrinkWrap: true,
+              // shrinkWrap: true,
               itemCount: _budgetList.length,
               physics: const ClampingScrollPhysics(
                 parent: AlwaysScrollableScrollPhysics(),
