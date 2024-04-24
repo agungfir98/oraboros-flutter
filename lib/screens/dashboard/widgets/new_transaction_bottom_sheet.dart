@@ -436,7 +436,6 @@ class _NewTransactionSheet extends State<NewTransactionSheet> {
             CustomButtonWidget(
               child: const Center(child: Text('submit')),
               onTap: () {
-                _formKey.currentState!.validate();
                 if (_orderList.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
@@ -454,6 +453,7 @@ class _NewTransactionSheet extends State<NewTransactionSheet> {
                   );
                   return;
                 }
+                if (!_formKey.currentState!.validate()) return;
                 TransactionService()
                     .newTransaction(userId, _orderList)
                     .then((value) {
