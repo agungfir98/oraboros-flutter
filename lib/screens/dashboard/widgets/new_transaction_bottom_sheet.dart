@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:oraboros/components/button.dart';
+import 'package:oraboros/components/toaster.dart';
 import 'package:oraboros/services/transaction.api.dart';
 import 'package:oraboros/main.dart';
 import 'package:oraboros/providers/profile.provider.dart';
@@ -163,6 +164,8 @@ class _NewTransactionSheet extends State<NewTransactionSheet> {
                                             floatingLabelAlignment:
                                                 FloatingLabelAlignment.start,
                                           ),
+                                          autovalidateMode:
+                                              AutovalidateMode.always,
                                           validator: (value) {
                                             if (value!.isEmpty) {
                                               return "field cannot be empty";
@@ -268,6 +271,8 @@ class _NewTransactionSheet extends State<NewTransactionSheet> {
                                                       ),
                                                     ),
                                                     isExpanded: true,
+                                                    autovalidateMode:
+                                                        AutovalidateMode.always,
                                                     onChanged: (value) {
                                                       setState(() {
                                                         _orderList[index]
@@ -436,50 +441,15 @@ class _NewTransactionSheet extends State<NewTransactionSheet> {
             CustomButtonWidget(
               child: const Center(child: Text('submit')),
               onTap: () {
-                if (_orderList.isEmpty) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      dismissDirection: DismissDirection.horizontal,
-                      content: Text(
-                        'At least one item on the field',
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: Colors.white,
-                            ),
-                      ),
-                      behavior: SnackBarBehavior.floating,
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 100),
-                    ),
-                  );
-                  return;
-                }
+                if (_orderList.isEmpty) return;
                 if (!_formKey.currentState!.validate()) return;
                 TransactionService()
                     .newTransaction(userId, _orderList)
                     .then((value) {
                   Navigator.of(context).pop();
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      behavior: SnackBarBehavior.floating,
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 100),
-                      content: Text(
-                        'success',
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: Colors.green[400],
-                            ),
-                      ),
-                    ),
-                  );
+                  Toast(context).success("Transaction recorded");
                 }).catchError((err) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      behavior: SnackBarBehavior.floating,
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 100),
-                      content: Text(err),
-                    ),
-                  );
+                  Toast(context).danger("Something went wrong with the server");
                 });
               },
             ),

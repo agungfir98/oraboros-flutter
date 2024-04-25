@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:oraboros/components/button.dart';
+import 'package:oraboros/components/toaster.dart';
 import 'package:oraboros/services/budget.service.dart';
 
 class NewBudgetSheet extends StatefulWidget {
@@ -215,24 +216,8 @@ class _NewBudgetSheetState extends State<NewBudgetSheet> {
                               BudgetService().newBudget(_budgetState).then(
                                 (value) {
                                   Navigator.of(context).pop();
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      dismissDirection:
-                                          DismissDirection.horizontal,
-                                      content: Text(
-                                        'budget successfully created',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodySmall
-                                            ?.copyWith(
-                                              color: Colors.green[400],
-                                            ),
-                                      ),
-                                      behavior: SnackBarBehavior.floating,
-                                      margin: const EdgeInsets.symmetric(
-                                          horizontal: 20, vertical: 100),
-                                    ),
-                                  );
+                                  Toast(context)
+                                      .success("budget successfully created");
                                 },
                               );
                             } catch (e) {
