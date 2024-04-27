@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:oraboros/components/button.dart';
+import 'package:oraboros/components/custom_text_form_field.dart';
 import 'package:oraboros/components/toaster.dart';
 import 'package:oraboros/services/budget.service.dart';
 
@@ -22,6 +23,7 @@ class _NewBudgetSheetState extends State<NewBudgetSheet> {
   final Map<String, TextEditingController> _controller = {};
   bool _showEmojiPicker = false;
   bool _canPop = true;
+  final Map<String, String> _formFieldError = {};
 
   final Map<String, dynamic> _budgetState = {
     "name": null,
@@ -35,8 +37,15 @@ class _NewBudgetSheetState extends State<NewBudgetSheet> {
     _nameFocusNode.addListener(_onFocusChange);
     _amountFocusNode.addListener(_onFocusChange);
     _controller['name'] = TextEditingController(text: _budgetState['name']);
-    _controller['amount'] =
-        TextEditingController(text: _budgetState['amount'].toString());
+    _controller['icon'] = TextEditingController(text: _budgetState['icon']);
+    _controller['amount'] = TextEditingController(
+      text: _budgetState['amount'].toString(),
+    );
+    _budgetState.forEach(
+      (key, value) {
+        _formFieldError[key] = "";
+      },
+    );
   }
 
   @override
@@ -45,6 +54,9 @@ class _NewBudgetSheetState extends State<NewBudgetSheet> {
     _amountFocusNode.removeListener(_onFocusChange);
     _nameFocusNode.dispose();
     _amountFocusNode.dispose();
+    _controller.forEach((key, value) {
+      value.dispose();
+    });
     super.dispose();
   }
 
@@ -54,6 +66,13 @@ class _NewBudgetSheetState extends State<NewBudgetSheet> {
         _showEmojiPicker = false;
         _canPop = true;
       }
+    });
+  }
+
+  void onChangeIcon(value) {
+    setState(() {
+      _budgetState['icon'] = value;
+      _controller['icon']?.text = value ?? "";
     });
   }
 
@@ -75,160 +94,163 @@ class _NewBudgetSheetState extends State<NewBudgetSheet> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-              child: Column(
-                children: [
-                  const Center(child: Text('new budget')),
-                  const SizedBox(height: 20),
-                  Form(
-                    key: _formKey,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          decoration: const BoxDecoration(
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Color(0xff122334),
-                                offset: Offset(3, 5),
-                              )
-                            ],
-                          ),
-                          child: TextFormField(
-                            controller: _controller['name'],
-                            focusNode: _nameFocusNode,
-                            decoration: const InputDecoration(
-                              label: Text("name"),
-                              contentPadding:
-                                  EdgeInsets.symmetric(horizontal: 16),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.zero),
-                                borderSide: BorderSide(
-                                  color: Color(0xff122334),
-                                  width: 1,
-                                ),
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.zero),
-                                borderSide: BorderSide(
-                                  color: Color(0xff122334),
-                                  width: 1,
-                                ),
-                              ),
-                            ),
-                            onChanged: (value) {
-                              setState(() {
-                                _budgetState['name'] = value;
-                              });
-                            },
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        Row(
+            Flexible(
+              child: SingleChildScrollView(
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Center(child: Text('new budget')),
+                      const SizedBox(height: 20),
+                      Form(
+                        key: _formKey,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            IconButton(
-                              onPressed: () {
-                                _nameFocusNode.unfocus();
-                                _amountFocusNode.unfocus();
+                            CustomTextFormField(
+                              placeholder: "name",
+                              controller: _controller['name'],
+                              focusNode: _nameFocusNode,
+                              onChanged: (value) {
                                 setState(() {
-                                  _canPop = _showEmojiPicker;
-                                  _showEmojiPicker = !_showEmojiPicker;
+                                  if (value.isNotEmpty) {
+                                    _formFieldError['name'] = '';
+                                  }
+                                  _budgetState['name'] = value;
                                 });
                               },
-                              icon: const Icon(
-                                size: 32,
-                                Icons.emoji_emotions_outlined,
-                                color: Color(0xff122334),
-                              ),
+                              validator: (value) {
+                                setState(() {
+                                  if (value!.isEmpty) {
+                                    _formFieldError['name'] =
+                                        "this field must not be empty";
+                                    return;
+                                  }
+                                  _formFieldError['name'] = "";
+                                  return;
+                                });
+                                return null;
+                              },
+                              errorMessage: _formFieldError['name'] ?? "",
                             ),
-                            Text(
-                              _budgetState['icon'] ?? "pick an emoji",
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize:
-                                    _budgetState['icon'] != null ? 24 : 16,
+                            Row(
+                              children: [
+                                IconButton(
+                                  onPressed: () {
+                                    _nameFocusNode.unfocus();
+                                    _amountFocusNode.unfocus();
+                                    setState(() {
+                                      _canPop = _showEmojiPicker;
+                                      _showEmojiPicker = !_showEmojiPicker;
+                                    });
+                                  },
+                                  icon: const Icon(
+                                    size: 32,
+                                    Icons.emoji_emotions_outlined,
+                                    color: Color(0xff122334),
+                                  ),
+                                ),
+                                Flexible(
+                                  fit: FlexFit.loose,
+                                  child: TextFormField(
+                                    validator: (value) {
+                                      if (value!.isEmpty) {
+                                        return "pick an emoji";
+                                      }
+                                      return null;
+                                    },
+                                    autovalidateMode:
+                                        AutovalidateMode.onUserInteraction,
+                                    readOnly: true,
+                                    style: const TextStyle(fontSize: 24),
+                                    decoration: const InputDecoration(
+                                      contentPadding:
+                                          EdgeInsets.symmetric(vertical: 0),
+                                      border: InputBorder.none,
+                                      errorBorder: InputBorder.none,
+                                      disabledBorder: InputBorder.none,
+                                      hintStyle: TextStyle(fontSize: 16),
+                                      hintText: "emoji",
+                                    ),
+                                    controller: _controller['icon'],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 20),
+                            CustomTextFormField(
+                              placeholder: "amount",
+                              prefix: const Text("Rp. "),
+                              controller: _controller['amount'],
+                              focusNode: _amountFocusNode,
+                              keyboardType:
+                                  const TextInputType.numberWithOptions(
+                                      decimal: true, signed: false),
+                              errorMessage: _formFieldError['amount'] ?? "",
+                              validator: (value) {
+                                setState(() {
+                                  if (value!.isEmpty) {
+                                    _formFieldError['amount'] =
+                                        "this field can't be empty";
+                                    return;
+                                  } else if (int.parse(value) < 1) {
+                                    _formFieldError['amount'] =
+                                        "value must be greater than zero";
+                                    return;
+                                  }
+                                  return;
+                                });
+                                return null;
+                              },
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly
+                              ],
+                              onChanged: (value) {
+                                setState(() {
+                                  if (value.isEmpty) {
+                                    _budgetState['amount'] = "";
+                                  } else {
+                                    _formFieldError['amount'] = "";
+                                    _budgetState['amount'] = int.parse(value);
+                                  }
+                                });
+                              },
+                            ),
+                            const SizedBox(height: 48),
+                            CustomButtonWidget(
+                              child: const Center(
+                                child: Text('submit'),
                               ),
+                              onTap: () {
+                                try {
+                                  print(_formKey.currentState?.validate());
+                                  if (!_formKey.currentState!.validate()) {
+                                    return;
+                                  }
+                                  BudgetService().newBudget(_budgetState).then(
+                                    (value) {
+                                      Navigator.of(context).pop();
+                                      Toast(context).success(
+                                        "budget successfully created",
+                                      );
+                                    },
+                                  );
+                                } catch (e) {
+                                  Toast(context).danger(
+                                    "something went wrong with the server",
+                                  );
+                                }
+                              },
                             ),
                           ],
                         ),
-                        const SizedBox(height: 20),
-                        Container(
-                          decoration: const BoxDecoration(
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Color(0xff122334),
-                                offset: Offset(3, 5),
-                              ),
-                            ],
-                          ),
-                          child: TextFormField(
-                            controller: _controller['amount'],
-                            focusNode: _amountFocusNode,
-                            keyboardType: const TextInputType.numberWithOptions(
-                              decimal: true,
-                              signed: false,
-                            ),
-                            decoration: const InputDecoration(
-                              contentPadding:
-                                  EdgeInsets.symmetric(horizontal: 16),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.zero),
-                                borderSide: BorderSide(
-                                  color: Color(0xff122334),
-                                  width: 1,
-                                ),
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.zero),
-                                borderSide: BorderSide(
-                                  color: Color(0xff122334),
-                                  width: 1,
-                                ),
-                              ),
-                              label: Text("amount"),
-                              prefix: Text('Rp.'),
-                            ),
-                            inputFormatters: [
-                              FilteringTextInputFormatter.digitsOnly
-                            ],
-                            onChanged: (value) {
-                              setState(() {
-                                if (value.isEmpty) {
-                                  _budgetState['amount'] = "";
-                                } else {
-                                  _budgetState['amount'] = int.parse(value);
-                                }
-                              });
-                            },
-                          ),
-                        ),
-                        const SizedBox(height: 48),
-                        CustomButtonWidget(
-                          child: const Center(
-                            child: Text('submit'),
-                          ),
-                          onTap: () {
-                            try {
-                              BudgetService().newBudget(_budgetState).then(
-                                (value) {
-                                  Navigator.of(context).pop();
-                                  Toast(context)
-                                      .success("budget successfully created");
-                                },
-                              );
-                            } catch (e) {
-                              print('error nih: ${e.toString()}');
-                            }
-                          },
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
             Offstage(
@@ -237,14 +259,10 @@ class _NewBudgetSheetState extends State<NewBudgetSheet> {
                 scrollController: _emojiScrollController,
                 textEditingController: _emojiController,
                 onEmojiSelected: (category, emoji) {
-                  setState(() {
-                    _budgetState['icon'] = emoji.emoji;
-                  });
+                  onChangeIcon(emoji.emoji);
                 },
                 onBackspacePressed: () {
-                  setState(() {
-                    _budgetState['icon'] = null;
-                  });
+                  onChangeIcon(null);
                 },
                 config: Config(
                   height: 300,
