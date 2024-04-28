@@ -1,8 +1,13 @@
+import 'package:oraboros/DTO/transaction.dto.dart';
 import 'package:oraboros/main.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class TransactionService {
-  Future newTransaction(String userId, List<Map<String, dynamic>> data) async {
+  Future newTransaction(
+      String userId, List<TransactionDTO> transactionData) async {
+    List<Map<String, dynamic>> data =
+        transactionData.map((value) => value.toJson()).toList();
+
     try {
       PostgrestMap transaction = await supabase
           .from('transactions')
