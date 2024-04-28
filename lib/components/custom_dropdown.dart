@@ -31,9 +31,10 @@ class _CustomDropDownFormFieldState extends State<CustomDropDownFormField> {
       child: Column(
         children: [
           Container(
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
+              border: Border.all(width: 1, color: Color(0xff122334)),
               color: Colors.white,
-              boxShadow: [
+              boxShadow: const [
                 BoxShadow(
                   offset: Offset(3, 5),
                   color: Color(0xff122334),
