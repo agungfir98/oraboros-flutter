@@ -1,4 +1,5 @@
 import 'package:oraboros/main.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class BudgetService {
   final String budgetTable = "budgets";
@@ -19,5 +20,11 @@ class BudgetService {
         .select()
         .single()
         .then((value) => value);
+  }
+
+  SupabaseStreamBuilder streamUserBudget(String userId) {
+    return supabase
+        .from(budgetTable)
+        .stream(primaryKey: ['id']).eq(userIdKey, userId);
   }
 }
