@@ -12,7 +12,7 @@ class CustomTextFormField extends StatefulWidget {
     this.controller,
     this.focusNode,
     this.inputFormatters,
-    required this.errorMessage,
+    this.errorMessage,
     required this.placeholder,
   });
 
@@ -21,7 +21,7 @@ class CustomTextFormField extends StatefulWidget {
   final void Function(String value)? onChanged;
   final TextInputType? keyboardType;
   final String? Function(String? value)? validator;
-  final String errorMessage;
+  final String? errorMessage;
   final TextEditingController? controller;
   final FocusNode? focusNode;
   final List<TextInputFormatter>? inputFormatters;
@@ -34,7 +34,7 @@ class CustomTextFormField extends StatefulWidget {
 class _CustomTextFormFieldState extends State<CustomTextFormField> {
   @override
   Widget build(BuildContext context) {
-    final String errorMessage = widget.errorMessage;
+    final String errorMessage = widget.errorMessage ?? "";
     return Container(
       margin: const EdgeInsets.only(bottom: 5),
       child: Column(
@@ -59,13 +59,18 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
               onChanged: widget.onChanged,
               autovalidateMode: AutovalidateMode.disabled,
               decoration: InputDecoration(
+                isDense: true,
                 hintText: widget.placeholder,
                 label: widget.label,
                 prefix: widget.prefix,
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                border: InputBorder.none,
                 errorBorder: InputBorder.none,
                 focusedBorder: InputBorder.none,
+                errorStyle: const TextStyle(height: 0),
               ),
+              style: Theme.of(context).textTheme.bodySmall,
               inputFormatters: widget.inputFormatters,
             ),
           ),
