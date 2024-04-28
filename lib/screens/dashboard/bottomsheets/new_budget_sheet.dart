@@ -24,7 +24,6 @@ class _NewBudgetSheetState extends State<NewBudgetSheet> {
   bool _showEmojiPicker = false;
   bool _canPop = true;
   final Map<String, String> _formFieldError = {};
-
   final Map<String, dynamic> _budgetState = {
     "name": null,
     "icon": null,

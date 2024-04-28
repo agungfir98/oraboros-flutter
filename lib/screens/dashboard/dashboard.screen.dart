@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:oraboros/screens/dashboard/bottomsheets/transaction/new_transaction_bottom_sheet.dart';
+import 'package:oraboros/screens/dashboard/bottomsheets/new_budget_sheet.dart';
+import 'package:oraboros/screens/dashboard/bottomsheets/transaction_filter_sheet.dart';
 import 'package:oraboros/screens/dashboard/screens/budget_section.dart';
 import 'package:oraboros/screens/dashboard/screens/main_section.dart';
 import 'package:oraboros/screens/dashboard/screens/transaction_section.dart';
-import 'package:oraboros/screens/dashboard/widgets/new_budget_sheet.dart';
-import 'package:oraboros/screens/dashboard/widgets/transaction_filter_sheet.dart';
-
-import 'widgets/new_transaction_bottom_sheet.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
