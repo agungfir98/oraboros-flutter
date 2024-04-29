@@ -1,49 +1,51 @@
-// ignore_for_file: non_constant_identifier_names
+class UserBudgetDTO {
+  static const String idKey = "id";
+  static const String nameKey = "name";
+  static const String iconKey = "icon";
+  static const String createdAtKey = "created_at";
+  static const String updatedAtKey = "updated_at";
+  static const String userIdKey = "user_id";
+  static const String amountKey = "amount";
 
-import 'dart:ffi';
+  String? id;
+  String? name;
+  String? icon;
+  String? createdAt;
+  String? updatedAt;
+  String? userId;
+  int? amount;
 
-class BudgetMapKey {
-  static const String id = "id";
-  static const String name = "name";
-  static const String icon = "icon";
-  static const String createdAt = "created_at";
-  static const String updatedAt = "updated_at";
-  static const String userId = "user_id";
-  static const String amount = "amount";
-}
-
-class BudgetDTO {
-  late String id;
-  late String name;
-  late String icon;
-  late String created_at;
-  late String? updated_at;
-  late String user_id;
-  late int amount;
-
-  BudgetDTO({
-    required this.id,
-    required this.name,
-    required this.icon,
-    required this.created_at,
-    this.updated_at,
-    required this.user_id,
-    required this.amount,
+  UserBudgetDTO({
+    this.id,
+    this.name,
+    this.icon,
+    this.createdAt,
+    this.updatedAt,
+    this.userId,
+    this.amount,
   });
 
-  factory BudgetDTO.fromJson(Map<String, dynamic> json) {
-    return BudgetDTO(
-      id: json[BudgetMapKey.id],
-      name: json[BudgetMapKey.name],
-      icon: json[BudgetMapKey.icon],
-      created_at: json[BudgetMapKey.createdAt],
-      updated_at: json[BudgetMapKey.updatedAt],
-      user_id: json[BudgetMapKey.userId],
-      amount: json[BudgetMapKey.amount],
-    );
+  Map<String, dynamic> toJson() {
+    return {
+      if (id != null) ...{UserBudgetDTO.idKey: id},
+      if (createdAt != null) ...{UserBudgetDTO.createdAtKey: createdAt},
+      if (name != null) ...{UserBudgetDTO.nameKey: name},
+      if (icon != null) ...{UserBudgetDTO.iconKey: icon},
+      if (amount != null) ...{UserBudgetDTO.amountKey: amount},
+      if (updatedAt != null) ...{UserBudgetDTO.updatedAtKey: updatedAt},
+      if (userId != null) ...{UserBudgetDTO.userIdKey: userId},
+    };
   }
 
-  static List<BudgetDTO> fromJsonList(List<Map<String, dynamic>> jsonList) {
-    return jsonList.map((budget) => BudgetDTO.fromJson(budget)).toList();
+  factory UserBudgetDTO.fromJson(Map<String, dynamic> json) {
+    return UserBudgetDTO(
+      id: json[UserBudgetDTO.idKey],
+      name: json[UserBudgetDTO.nameKey],
+      icon: json[UserBudgetDTO.iconKey],
+      createdAt: json[UserBudgetDTO.createdAtKey],
+      updatedAt: json[UserBudgetDTO.updatedAtKey],
+      userId: json[UserBudgetDTO.userIdKey],
+      amount: json[UserBudgetDTO.amountKey],
+    );
   }
 }
