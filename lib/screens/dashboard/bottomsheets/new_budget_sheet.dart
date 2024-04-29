@@ -87,203 +87,210 @@ class _NewBudgetSheetState extends State<NewBudgetSheet> {
           });
         }
       },
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Flexible(
-            child: SingleChildScrollView(
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-                margin: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom,
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Center(child: Text('new budget')),
-                    const SizedBox(height: 20),
-                    Form(
-                      key: _formKey,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CustomTextFormField(
-                            placeholder: "name",
-                            controller: _controller['name'],
-                            focusNode: _nameFocusNode,
-                            onChanged: (value) {
-                              setState(() {
-                                if (value.isNotEmpty) {
-                                  _formFieldError['name'] = '';
-                                }
-                                _budgetState['name'] = value;
-                              });
-                            },
-                            validator: (value) {
-                              if (value!.isEmpty) {
+      child: Container(
+        margin: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Flexible(
+              child: SingleChildScrollView(
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Center(child: Text('new budget')),
+                      const SizedBox(height: 20),
+                      Form(
+                        key: _formKey,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomTextFormField(
+                              placeholder: "name",
+                              controller: _controller['name'],
+                              focusNode: _nameFocusNode,
+                              onChanged: (value) {
                                 setState(() {
-                                  _formFieldError['name'] =
-                                      "this field must not be empty";
+                                  if (value.isNotEmpty) {
+                                    _formFieldError['name'] = '';
+                                  }
+                                  _budgetState['name'] = value;
                                 });
-                                return "";
-                              }
-                              return null;
-                            },
-                            errorMessage: _formFieldError['name'] ?? "",
-                          ),
-                          Row(
-                            children: [
-                              IconButton(
-                                onPressed: () {
-                                  _nameFocusNode.unfocus();
-                                  _amountFocusNode.unfocus();
+                              },
+                              validator: (value) {
+                                if (value!.isEmpty) {
                                   setState(() {
-                                    _canPop = _showEmojiPicker;
-                                    _showEmojiPicker = !_showEmojiPicker;
+                                    _formFieldError['name'] =
+                                        "this field must not be empty";
                                   });
-                                },
-                                icon: const Icon(
-                                  size: 32,
-                                  Icons.emoji_emotions_outlined,
-                                  color: Color(0xff122334),
-                                ),
-                              ),
-                              Flexible(
-                                fit: FlexFit.loose,
-                                child: TextFormField(
-                                  validator: (value) {
-                                    if (value!.isEmpty) {
-                                      return "pick an emoji";
-                                    }
-                                    return null;
-                                  },
-                                  autovalidateMode:
-                                      AutovalidateMode.onUserInteraction,
-                                  readOnly: true,
-                                  style: const TextStyle(fontSize: 24),
-                                  decoration: const InputDecoration(
-                                    contentPadding:
-                                        EdgeInsets.symmetric(vertical: 0),
-                                    border: InputBorder.none,
-                                    errorBorder: InputBorder.none,
-                                    disabledBorder: InputBorder.none,
-                                    hintStyle: TextStyle(fontSize: 16),
-                                    hintText: "emoji",
-                                  ),
-                                  controller: _controller['icon'],
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 20),
-                          CustomTextFormField(
-                            placeholder: "amount",
-                            prefix: const Text("Rp. "),
-                            controller: _controller['amount'],
-                            focusNode: _amountFocusNode,
-                            keyboardType: const TextInputType.numberWithOptions(
-                                decimal: true, signed: false),
-                            errorMessage: _formFieldError['amount'] ?? "",
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                setState(() {
-                                  _formFieldError['amount'] =
-                                      "this field can't be empty";
-                                });
-                                return "";
-                              } else if (int.parse(value) < 1) {
-                                setState(() {
-                                  _formFieldError['amount'] =
-                                      "value must be greater than zero";
-                                });
-                                return "";
-                              }
-                              return null;
-                            },
-                            inputFormatters: [
-                              FilteringTextInputFormatter.digitsOnly
-                            ],
-                            onChanged: (value) {
-                              setState(() {
-                                if (value.isEmpty) {
-                                  _budgetState['amount'] = "";
-                                } else {
-                                  _formFieldError['amount'] = "";
-                                  _budgetState['amount'] = int.parse(value);
+                                  return "";
                                 }
-                              });
-                            },
-                          ),
-                          const SizedBox(height: 48),
-                          CustomButtonWidget(
-                            child: const Center(
-                              child: Text('submit'),
+                                return null;
+                              },
+                              errorMessage: _formFieldError['name'] ?? "",
                             ),
-                            onTap: () {
-                              try {
-                                if (!_formKey.currentState!.validate()) return;
-                                BudgetService().newBudget(_budgetState).then(
-                                  (value) {
-                                    Navigator.of(context).pop();
-                                    Toast(context).success(
-                                      "budget successfully created",
-                                    );
+                            Row(
+                              children: [
+                                IconButton(
+                                  onPressed: () {
+                                    _nameFocusNode.unfocus();
+                                    _amountFocusNode.unfocus();
+                                    setState(() {
+                                      _canPop = _showEmojiPicker;
+                                      _showEmojiPicker = !_showEmojiPicker;
+                                    });
                                   },
-                                );
-                              } catch (e) {
-                                Toast(context).danger(
-                                  "something went wrong with the server",
-                                );
-                              }
-                            },
-                          ),
-                        ],
+                                  icon: const Icon(
+                                    size: 32,
+                                    Icons.emoji_emotions_outlined,
+                                    color: Color(0xff122334),
+                                  ),
+                                ),
+                                Flexible(
+                                  fit: FlexFit.loose,
+                                  child: TextFormField(
+                                    validator: (value) {
+                                      if (value!.isEmpty) {
+                                        return "pick an emoji";
+                                      }
+                                      return null;
+                                    },
+                                    autovalidateMode:
+                                        AutovalidateMode.onUserInteraction,
+                                    readOnly: true,
+                                    style: const TextStyle(fontSize: 24),
+                                    decoration: const InputDecoration(
+                                      contentPadding:
+                                          EdgeInsets.symmetric(vertical: 0),
+                                      border: InputBorder.none,
+                                      errorBorder: InputBorder.none,
+                                      disabledBorder: InputBorder.none,
+                                      hintStyle: TextStyle(fontSize: 16),
+                                      hintText: "emoji",
+                                    ),
+                                    controller: _controller['icon'],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 20),
+                            CustomTextFormField(
+                              placeholder: "amount",
+                              prefix: const Text("Rp. "),
+                              controller: _controller['amount'],
+                              focusNode: _amountFocusNode,
+                              keyboardType:
+                                  const TextInputType.numberWithOptions(
+                                decimal: true,
+                                signed: false,
+                              ),
+                              errorMessage: _formFieldError['amount'] ?? "",
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  setState(() {
+                                    _formFieldError['amount'] =
+                                        "this field can't be empty";
+                                  });
+                                  return "";
+                                } else if (int.parse(value) < 1) {
+                                  setState(() {
+                                    _formFieldError['amount'] =
+                                        "value must be greater than zero";
+                                  });
+                                  return "";
+                                }
+                                return null;
+                              },
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly
+                              ],
+                              onChanged: (value) {
+                                setState(() {
+                                  if (value.isEmpty) {
+                                    _budgetState['amount'] = "";
+                                  } else {
+                                    _formFieldError['amount'] = "";
+                                    _budgetState['amount'] = int.parse(value);
+                                  }
+                                });
+                              },
+                            ),
+                            const SizedBox(height: 48),
+                            CustomButtonWidget(
+                              child: const Center(
+                                child: Text('submit'),
+                              ),
+                              onTap: () {
+                                try {
+                                  if (!_formKey.currentState!.validate()) {
+                                    return;
+                                  }
+                                  BudgetService().newBudget(_budgetState).then(
+                                    (value) {
+                                      Navigator.of(context).pop();
+                                      Toast(context).success(
+                                        "budget successfully created",
+                                      );
+                                    },
+                                  );
+                                } catch (e) {
+                                  Toast(context).danger(
+                                    "something went wrong with the server",
+                                  );
+                                }
+                              },
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          Offstage(
-            offstage: !_showEmojiPicker,
-            child: EmojiPicker(
-              scrollController: _emojiScrollController,
-              textEditingController: _emojiController,
-              onEmojiSelected: (category, emoji) {
-                onChangeIcon(emoji.emoji);
-              },
-              onBackspacePressed: () {
-                onChangeIcon(null);
-              },
-              config: Config(
-                height: 300,
-                checkPlatformCompatibility: true,
-                emojiViewConfig: EmojiViewConfig(
-                  // Issue: https://github.com/flutter/flutter/issues/28894
-                  emojiSizeMax: 28 *
-                      (defaultTargetPlatform == TargetPlatform.iOS
-                          ? 1.20
-                          : 1.0),
+            Offstage(
+              offstage: !_showEmojiPicker,
+              child: EmojiPicker(
+                scrollController: _emojiScrollController,
+                textEditingController: _emojiController,
+                onEmojiSelected: (category, emoji) {
+                  onChangeIcon(emoji.emoji);
+                },
+                onBackspacePressed: () {
+                  onChangeIcon(null);
+                },
+                config: Config(
+                  height: 300,
+                  checkPlatformCompatibility: true,
+                  emojiViewConfig: EmojiViewConfig(
+                    // Issue: https://github.com/flutter/flutter/issues/28894
+                    emojiSizeMax: 28 *
+                        (defaultTargetPlatform == TargetPlatform.iOS
+                            ? 1.20
+                            : 1.0),
+                  ),
+                  swapCategoryAndBottomBar: false,
+                  skinToneConfig: const SkinToneConfig(),
+                  categoryViewConfig: const CategoryViewConfig(
+                    iconColorSelected: Color(0xff122334),
+                    indicatorColor: Color(0xff122334),
+                  ),
+                  bottomActionBarConfig: const BottomActionBarConfig(
+                    buttonColor: Colors.transparent,
+                    backgroundColor: Color(0xFFEBEFF2),
+                    buttonIconColor: Color(0xff122334),
+                  ),
+                  searchViewConfig: const SearchViewConfig(),
                 ),
-                swapCategoryAndBottomBar: false,
-                skinToneConfig: const SkinToneConfig(),
-                categoryViewConfig: const CategoryViewConfig(
-                  iconColorSelected: Color(0xff122334),
-                  indicatorColor: Color(0xff122334),
-                ),
-                bottomActionBarConfig: const BottomActionBarConfig(
-                  buttonColor: Colors.transparent,
-                  backgroundColor: Color(0xFFEBEFF2),
-                  buttonIconColor: Color(0xff122334),
-                ),
-                searchViewConfig: const SearchViewConfig(),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
