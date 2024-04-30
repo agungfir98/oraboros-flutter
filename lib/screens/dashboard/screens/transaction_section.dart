@@ -1,6 +1,12 @@
-import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
-import 'package:flutter/foundation.dart' as foundation;
+import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:oraboros/DTO/order.dto.dart';
+import 'package:oraboros/DTO/transaction.dto.dart';
+import 'package:oraboros/components/separator.dart';
+import 'package:oraboros/providers/profile.provider.dart';
+import 'package:oraboros/services/transaction.service.dart';
+import 'package:provider/provider.dart';
 
 /// Example for EmojiPicker
 class TransactionSection extends StatefulWidget {
@@ -11,126 +17,144 @@ class TransactionSection extends StatefulWidget {
 }
 
 class _TransactionSection extends State<TransactionSection> {
-  final _controller = TextEditingController();
-  final _scrollController = ScrollController();
-  bool _emojiShowing = false;
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: SafeArea(
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          appBar: AppBar(
-            title: const Text('Emoji Picker Example App'),
-          ),
-          body: Column(
-            children: [
-              Expanded(
-                child: Center(
-                  child: ValueListenableBuilder(
-                    valueListenable: _controller,
-                    builder: (context, text, child) {
-                      return Text(
-                        _controller.text,
-                      );
-                    },
+    String userId = context.read<ProfileProvider>().profile[ProfileProvider.id];
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          'transactions history',
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
+      ),
+      body: SafeArea(
+        child: Container(
+          margin: const EdgeInsets.only(top: 10),
+          child: FutureBuilder<List<UserTransactions>>(
+            future: TransactionService().getUserTransaction(userId),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(
+                    color: Color(0xff122334),
                   ),
-                ),
-              ),
-              Container(
-                  height: 66.0,
-                  color: Colors.blue,
-                  child: Row(
-                    children: [
-                      Material(
-                        color: Colors.transparent,
-                        child: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              _emojiShowing = !_emojiShowing;
-                            });
-                          },
-                          icon: const Icon(
-                            Icons.emoji_emotions,
-                            color: Colors.white,
-                          ),
+                );
+              }
+              if (!snapshot.hasData) {
+                return const Center(
+                  child: Text('no data'),
+                );
+              }
+              List<UserTransactions> data = snapshot.data!;
+              return ListView.separated(
+                itemBuilder: (context, index) {
+                  List<UserOrderDTO> order = data[index].orders;
+                  int total = order.fold(
+                      0, (value, element) => value + element.amount!);
+
+                  return Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 1),
+                      color: Colors.white,
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Color(0xff122334),
+                          offset: Offset(3, 5),
                         ),
+                      ],
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(10),
                       ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: TextField(
-                              controller: _controller,
-                              scrollController: _scrollController,
-                              style: const TextStyle(
-                                fontSize: 20.0,
-                                color: Colors.black87,
-                              ),
-                              maxLines: 1,
-                              decoration: InputDecoration(
-                                hintText: 'Type a message',
-                                filled: true,
-                                fillColor: Colors.white,
-                                contentPadding: const EdgeInsets.only(
-                                  left: 16.0,
-                                  bottom: 8.0,
-                                  top: 8.0,
-                                  right: 16.0,
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(50.0),
-                                ),
-                              )),
-                        ),
-                      ),
-                      Material(
-                        color: const Color.fromARGB(0, 219, 83, 83),
-                        child: IconButton(
-                            onPressed: () {
-                              // send message
-                            },
-                            icon: const Icon(
-                              Icons.send,
-                              color: Colors.white,
-                            )),
-                      )
-                    ],
-                  )),
-              Offstage(
-                offstage: !_emojiShowing,
-                child: EmojiPicker(
-                  textEditingController: _controller,
-                  scrollController: _scrollController,
-                  config: Config(
-                    height: 256,
-                    checkPlatformCompatibility: true,
-                    emojiViewConfig: EmojiViewConfig(
-                      // Issue: https://github.com/flutter/flutter/issues/28894
-                      emojiSizeMax: 28 *
-                          (foundation.defaultTargetPlatform ==
-                                  TargetPlatform.iOS
-                              ? 1.2
-                              : 1.0),
                     ),
-                    swapCategoryAndBottomBar: false,
-                    skinToneConfig: const SkinToneConfig(),
-                    categoryViewConfig: const CategoryViewConfig(),
-                    bottomActionBarConfig: const BottomActionBarConfig(),
-                    searchViewConfig: const SearchViewConfig(),
-                  ),
-                ),
-              ),
-            ],
+                    child: ListTile(
+                      leading: Text(
+                        DateFormat('dd/MM')
+                            .format(DateTime.parse(data[index].createdAt)),
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall
+                            ?.copyWith(fontWeight: FontWeight.w900),
+                      ),
+                      title: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ListView.separated(
+                            separatorBuilder: (context, index) {
+                              return const Separator();
+                            },
+                            shrinkWrap: true,
+                            itemCount: data[index].orders.length,
+                            physics: const ClampingScrollPhysics(),
+                            itemBuilder: (context, i) {
+                              return Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    flex: 1,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text("${order[i].budgets?.icon}"),
+                                        Expanded(
+                                          child: Text(
+                                            "${order[i].name}",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodySmall,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Text(
+                                    "Rp. ${NumberFormat.decimalPattern().format(order[i].amount)}",
+                                    style:
+                                        Theme.of(context).textTheme.bodySmall,
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                          const Separator(),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Expanded(child: Text('Total')),
+                              Text(
+                                'Rp. ${NumberFormat.decimalPattern().format(total)}',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(fontWeight: FontWeight.w600),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  );
+                },
+                itemCount: data.length,
+                separatorBuilder: (context, index) {
+                  return const SizedBox(height: 10);
+                },
+              );
+            },
           ),
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
   }
 }
