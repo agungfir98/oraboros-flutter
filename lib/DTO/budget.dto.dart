@@ -49,3 +49,35 @@ class UserBudgetDTO {
     );
   }
 }
+
+class NewBudgetDTO {
+  static const String nameKey = "name";
+  static const String amountKey = 'amount';
+  static const String iconKey = "icon";
+
+  final String name;
+  final int amount;
+  final String icon;
+
+  NewBudgetDTO({
+    required this.name,
+    required this.amount,
+    required this.icon,
+  });
+
+  factory NewBudgetDTO.fromJson(Map<String, dynamic> json) {
+    return NewBudgetDTO(
+      name: json[NewBudgetDTO.nameKey],
+      amount: json[NewBudgetDTO.amountKey],
+      icon: json[NewBudgetDTO.iconKey],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      nameKey: name,
+      amountKey: amount,
+      iconKey: icon,
+    };
+  }
+}

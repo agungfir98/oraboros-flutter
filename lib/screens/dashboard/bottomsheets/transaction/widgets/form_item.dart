@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:oraboros/DTO/budget.dto.dart';
 import 'package:oraboros/DTO/transaction.dto.dart';
 import 'package:oraboros/components/custom_dropdown.dart';
 import 'package:oraboros/components/custom_text_form_field.dart';
@@ -104,17 +105,17 @@ class _FormItemState extends State<FormItem> {
             children: [
               Flexible(
                 fit: FlexFit.loose,
-                child: FutureBuilder<List<Map<String, dynamic>>>(
+                child: FutureBuilder<List<UserBudgetDTO>>(
                   future: BudgetService().getUserBudget(userId),
                   builder: (context, snapshot) {
                     if (snapshot.hasError) {
                       return Text("Error: ${snapshot.error}");
                     } else {
-                      List<Map<String, dynamic>>? data = snapshot.data;
-                      Map<String, dynamic>? selectedItem;
+                      List<UserBudgetDTO>? data = snapshot.data;
+                      UserBudgetDTO? selectedItem;
                       if (widget.order.budgetid != null && data != null) {
                         selectedItem = data.firstWhere(
-                            (item) => item['id'] == widget.order.budgetid);
+                            (item) => item.id == widget.order.budgetid);
                       }
                       return CustomDropDownFormField(
                         validator: (value) {
@@ -137,7 +138,7 @@ class _FormItemState extends State<FormItem> {
                         value: widget.order.budgetid,
                         hint: Text(
                           selectedItem != null
-                              ? "${selectedItem['icon']} ${selectedItem['name']}"
+                              ? "${selectedItem.icon} ${selectedItem.name}"
                               : "select an item",
                           style: const TextStyle(
                             overflow: TextOverflow.ellipsis,
@@ -145,16 +146,16 @@ class _FormItemState extends State<FormItem> {
                         ),
                         items: snapshot.data?.map((value) {
                           return DropdownMenuItem<String>(
-                            value: value['id'],
+                            value: value.id,
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Text(value['icon']),
+                                Text(value.icon!),
                                 const SizedBox(width: 10),
                                 Flexible(
                                   fit: FlexFit.loose,
                                   child: Text(
-                                    value['name'],
+                                    value.name!,
                                     style: const TextStyle(
                                       overflow: TextOverflow.ellipsis,
                                     ),

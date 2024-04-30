@@ -13,7 +13,7 @@ class BudgetSection extends StatefulWidget {
 }
 
 class _BudgetSectionState extends State<BudgetSection> {
-  List<Map<String, dynamic>> _budgetList = [];
+  List<UserBudgetDTO> _budgetList = [];
 
   @override
   void initState() {
@@ -22,10 +22,9 @@ class _BudgetSectionState extends State<BudgetSection> {
   }
 
   Future fetchData() async {
-    String userId = context.read<ProfileProvider>().profile['id'];
+    String userId = context.read<ProfileProvider>().profile[ProfileProvider.id];
     try {
-      List<Map<String, dynamic>> data =
-          await BudgetService().getUserBudget(userId);
+      List<UserBudgetDTO> data = await BudgetService().getUserBudget(userId);
       setState(() {
         _budgetList = data;
       });
@@ -80,17 +79,17 @@ class _BudgetSectionState extends State<BudgetSection> {
                     style: ListTileStyle.list,
                     visualDensity: VisualDensity.comfortable,
                     leading: Text(
-                      _budgetList[index][BudgetMapKey.icon],
+                      _budgetList[index].icon!,
                       style: const TextStyle(
                         fontSize: 24,
                       ),
                     ),
                     title: Text(
-                      _budgetList[index][BudgetMapKey.name],
+                      _budgetList[index].name!,
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                     trailing: Text(
-                        "Rp. ${NumberFormat.decimalPattern().format(_budgetList[index][BudgetMapKey.amount])}"),
+                        "Rp. ${NumberFormat.decimalPattern().format(_budgetList[index].amount)}"),
                   ),
                 );
               },

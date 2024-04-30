@@ -14,7 +14,7 @@ class MainSection extends StatefulWidget {
 }
 
 class _MainSectionState extends State<MainSection> {
-  List<Map<String, dynamic>> _budgetList = [];
+  List<UserBudgetDTO> _budgetList = [];
 
   @override
   void initState() {
@@ -25,7 +25,7 @@ class _MainSectionState extends State<MainSection> {
   fetchUserBudget() async {
     String userId = context.read<ProfileProvider>().profile[ProfileProvider.id];
     try {
-      List<Map<String, dynamic>> budgetList =
+      List<UserBudgetDTO> budgetList =
           await BudgetService().getUserBudget(userId);
       setState(() {
         _budgetList = budgetList;
@@ -142,14 +142,14 @@ class _MainSectionState extends State<MainSection> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "${_budgetList[index][BudgetMapKey.name]} ${_budgetList[index][BudgetMapKey.icon]}",
+                      "${_budgetList[index].name} ${_budgetList[index].icon}",
                       style: Theme.of(context)
                           .textTheme
                           .bodySmall
                           ?.copyWith(overflow: TextOverflow.ellipsis),
                     ),
                     Text(
-                        "Rp. ${NumberFormat.decimalPattern().format(_budgetList[index][BudgetMapKey.amount])}",
+                        "Rp. ${NumberFormat.decimalPattern().format(_budgetList[index].amount)}",
                         style: Theme.of(context)
                             .textTheme
                             .bodySmall

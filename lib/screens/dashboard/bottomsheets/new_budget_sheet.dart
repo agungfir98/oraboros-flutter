@@ -2,6 +2,7 @@ import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:oraboros/DTO/budget.dto.dart';
 import 'package:oraboros/components/button.dart';
 import 'package:oraboros/components/custom_text_form_field.dart';
 import 'package:oraboros/components/toaster.dart';
@@ -25,9 +26,9 @@ class _NewBudgetSheetState extends State<NewBudgetSheet> {
   bool _canPop = true;
   final Map<String, String> _formFieldError = {};
   final Map<String, dynamic> _budgetState = {
-    "name": null,
-    "icon": null,
-    "amount": ''
+    NewBudgetDTO.nameKey: null,
+    NewBudgetDTO.iconKey: null,
+    NewBudgetDTO.amountKey: ''
   };
 
   @override
@@ -35,11 +36,13 @@ class _NewBudgetSheetState extends State<NewBudgetSheet> {
     super.initState();
     _nameFocusNode.addListener(_onFocusChange);
     _amountFocusNode.addListener(_onFocusChange);
-    _controller['name'] = TextEditingController(text: _budgetState['name']);
-    _controller['icon'] = TextEditingController(text: _budgetState['icon']);
-    _controller['amount'] = TextEditingController(
-      text: _budgetState['amount'].toString(),
-    );
+    _controller[NewBudgetDTO.nameKey] =
+        TextEditingController(text: _budgetState[NewBudgetDTO.nameKey]);
+    _controller[NewBudgetDTO.iconKey] =
+        TextEditingController(text: _budgetState[NewBudgetDTO.iconKey]);
+    _controller[NewBudgetDTO.amountKey] = TextEditingController(
+        text: _budgetState[NewBudgetDTO.amountKey].toString());
+
     _budgetState.forEach(
       (key, value) {
         _formFieldError[key] = "";
@@ -70,8 +73,8 @@ class _NewBudgetSheetState extends State<NewBudgetSheet> {
 
   void onChangeIcon(value) {
     setState(() {
-      _budgetState['icon'] = value;
-      _controller['icon']?.text = value ?? "";
+      _budgetState[NewBudgetDTO.iconKey] = value;
+      _controller[NewBudgetDTO.iconKey]?.text = value ?? "";
     });
   }
 
@@ -112,27 +115,28 @@ class _NewBudgetSheetState extends State<NewBudgetSheet> {
                           children: [
                             CustomTextFormField(
                               placeholder: "name",
-                              controller: _controller['name'],
+                              controller: _controller[NewBudgetDTO.nameKey],
                               focusNode: _nameFocusNode,
                               onChanged: (value) {
                                 setState(() {
                                   if (value.isNotEmpty) {
-                                    _formFieldError['name'] = '';
+                                    _formFieldError[NewBudgetDTO.nameKey] = '';
                                   }
-                                  _budgetState['name'] = value;
+                                  _budgetState[NewBudgetDTO.nameKey] = value;
                                 });
                               },
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   setState(() {
-                                    _formFieldError['name'] =
+                                    _formFieldError[NewBudgetDTO.nameKey] =
                                         "this field must not be empty";
                                   });
                                   return "";
                                 }
                                 return null;
                               },
-                              errorMessage: _formFieldError['name'] ?? "",
+                              errorMessage:
+                                  _formFieldError[NewBudgetDTO.nameKey] ?? "",
                             ),
                             Row(
                               children: [
@@ -173,7 +177,8 @@ class _NewBudgetSheetState extends State<NewBudgetSheet> {
                                       hintStyle: TextStyle(fontSize: 16),
                                       hintText: "emoji",
                                     ),
-                                    controller: _controller['icon'],
+                                    controller:
+                                        _controller[NewBudgetDTO.iconKey],
                                   ),
                                 ),
                               ],
@@ -182,24 +187,25 @@ class _NewBudgetSheetState extends State<NewBudgetSheet> {
                             CustomTextFormField(
                               placeholder: "amount",
                               prefix: const Text("Rp. "),
-                              controller: _controller['amount'],
+                              controller: _controller[NewBudgetDTO.amountKey],
                               focusNode: _amountFocusNode,
                               keyboardType:
                                   const TextInputType.numberWithOptions(
                                 decimal: true,
                                 signed: false,
                               ),
-                              errorMessage: _formFieldError['amount'] ?? "",
+                              errorMessage:
+                                  _formFieldError[NewBudgetDTO.amountKey] ?? "",
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   setState(() {
-                                    _formFieldError['amount'] =
+                                    _formFieldError[NewBudgetDTO.amountKey] =
                                         "this field can't be empty";
                                   });
                                   return "";
                                 } else if (int.parse(value) < 1) {
                                   setState(() {
-                                    _formFieldError['amount'] =
+                                    _formFieldError[NewBudgetDTO.amountKey] =
                                         "value must be greater than zero";
                                   });
                                   return "";
@@ -212,10 +218,12 @@ class _NewBudgetSheetState extends State<NewBudgetSheet> {
                               onChanged: (value) {
                                 setState(() {
                                   if (value.isEmpty) {
-                                    _budgetState['amount'] = "";
+                                    _budgetState[NewBudgetDTO.amountKey] = "";
                                   } else {
-                                    _formFieldError['amount'] = "";
-                                    _budgetState['amount'] = int.parse(value);
+                                    _formFieldError[NewBudgetDTO.amountKey] =
+                                        "";
+                                    _budgetState[NewBudgetDTO.amountKey] =
+                                        int.parse(value);
                                   }
                                 });
                               },
@@ -230,7 +238,10 @@ class _NewBudgetSheetState extends State<NewBudgetSheet> {
                                   if (!_formKey.currentState!.validate()) {
                                     return;
                                   }
-                                  BudgetService().newBudget(_budgetState).then(
+                                  BudgetService()
+                                      .newBudget(
+                                          NewBudgetDTO.fromJson(_budgetState))
+                                      .then(
                                     (value) {
                                       Navigator.of(context).pop();
                                       Toast(context).success(
