@@ -3,7 +3,7 @@ import 'package:oraboros/screens/dashboard/bottomsheets/transaction/new_transact
 import 'package:oraboros/screens/dashboard/bottomsheets/new_budget_sheet.dart';
 import 'package:oraboros/screens/dashboard/bottomsheets/transaction_filter_sheet.dart';
 import 'package:oraboros/screens/dashboard/screens/budget_section.dart';
-import 'package:oraboros/screens/dashboard/screens/main_section.dart';
+import 'package:oraboros/screens/dashboard/screens/main_section/main_section.dart';
 import 'package:oraboros/screens/dashboard/screens/transaction_section.dart';
 
 class MyHomePage extends StatefulWidget {
