@@ -45,6 +45,12 @@ class UserOrderDTO {
     );
   }
 
+  List<UserOrderDTO> fromListJson(List<Map<String, dynamic>> listMap) {
+    return listMap.map((item) {
+      return UserOrderDTO.fromJson(item);
+    }).toList();
+  }
+
   Map<String, dynamic> toJson() {
     return {
       if (id != null) ...{UserOrderDTO.idKey: id},
